@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 var speed : int = 100
 var direction : Vector2
+var attack : bool
 @onready var sprite : AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
@@ -9,13 +10,14 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	direction = Input.get_vector("left", "right", "up", "down")
+	attack = Input.is_action_just_pressed("attack")
 	velocity = direction * speed
 	
 	if direction != Vector2.ZERO:
 		if abs(direction.x) > abs(direction.y):
 			if direction.x > 0:
 				sprite.flip_h = false
-				sprite.play("side-walk")
+				sprite.play("side-walk")			
 			else:
 				sprite.flip_h = true
 				sprite.play("side-walk")
@@ -24,5 +26,7 @@ func _process(delta: float) -> void:
 				sprite.play("down-walk")
 			else:
 				sprite.play("up-walk")
-				
+	else:
+		sprite.play("idle")	
+		
 	move_and_slide()
